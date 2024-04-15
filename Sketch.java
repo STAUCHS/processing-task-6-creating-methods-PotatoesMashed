@@ -6,7 +6,7 @@ public class Sketch extends PApplet {
    * Called once at the beginning of execution, put your size all in this method
    */
   public void settings() {
-    size(1000, 700);
+    size(1200, 700);
   }
 
   /** 
@@ -23,66 +23,58 @@ public class Sketch extends PApplet {
    * Called repeatedly, anything drawn to the screen goes here
    */
   public void draw() {
+    // prints design
+    fill(width % 255, 255 - height % 255, 255 - width % 255);
+    rect(0, 0, width, height);// resets background
+    printGrid(800 / 7, 700 / 7, 1, spacing(800 / 7, 700 / 7, 20, 15));
+    printGrid(485, 120, 2, spacing(485, 120, 3, 20));
+  }
+
+  /**
+   * prints a certain design to the screen
+   * @param width width of design
+   * @param height height of design
+   * @param intDesign design to be printed
+   * @param dblSpace value returned by spacing method
+   * @author George D.
+   */
+  private void printGrid(int intWidth, int intHeight, int intDesign, double dblSpace){
     // Declare Variables
-    double space; // variable to help space items
     int intX; // x coordinate of object to be printed
     int intY; // y coordinate of object to be printed
     int intGapX; // gap between columns
     int intGapY; // gap between rows
 
-    // prints design
-    fill(123,254,93);
-    rect(0,0,width,height);// resets background
-    
     // Sets Variables
-    space = spacing(400 / 7 * 2, 350 / 7 * 2, 20, 15);
-    intGapX = (int)(space / 10000.);
-    intGapY = (int)(space % 1000);
+    intGapX = (int)(dblSpace / 10000.);
+    intGapY = (int)(dblSpace % 1000);
     intX = intGapX;
     intY = intGapY;
     
     // Prints Grid
     fill(0);
-    for (int i = 1; i <= (int)(space * 1000) % 1000; i++){ // column
+    for (int i = 1; i <= (int)(dblSpace * 1000) % 1000; i++){ // column
       intY = intGapY; // resets y value
 
-      for (int n = 1; n <= (int)(Math.round((space % 1 * 1000000) % 1000)); n++){ // row
-        if ((i + n) % 2 == 0){
+      for (int n = 1; n <= (int)(Math.round((dblSpace % 1 * 1000000) % 1000)); n++){ // row
+        if ((i + n) % 2 == intDesign - 1 && intDesign == 1){
           pig(intX, intY, intX * 255 / width, intY * 255 / height, 255 - intX * 255 / height);
+        } else if ((i + n) % 2 == intDesign - 1 && intDesign == 2){ 
+            clock(intX, intY);
         }
-        intY += intGapY + (350 / 7 * 2);        
+        intY += intGapY + intHeight;        
       }
-      intX += intGapX + (400 / 7 * 2);
+      intX += intGapX + intWidth;
     }
-    
-    space = spacing(485, 120, 15, 0);
-    intGapX = (int)(space / 10000.);
-    intGapY = (int)(space % 1000);
-    intX = intGapX;
-    intY = intGapY;
-    
-    // Prints Grid
-    for (int i = 1; i <= (int)(space * 1000) % 1000; i++){ // column
-      intY = intGapY; // resets y value
-
-      for (int n = 1; n <= (int)(Math.round((space % 1 * 1000000) % 1000)); n++){ // row
-        //if ((i + n) % 2 == 1){
-          clock(intX, intY);
-        //}
-        intY += intGapY + 120;        
-      }
-      intX += intGapX + 485;
-    }
-
   }
 
   /**
-   * prints a pig at the given coordinates
-   * @param X-coordinate 
-   * @param Y-coordinate 
-   * @param amount of red in eye and nose
-   * @param amount of green in eye and nose
-   * @param amount of blue in eye and nose
+   * prints a pig at a specified coordinates
+   * @param intX X-coordinate 
+   * @param intY Y coordinate 
+   * @param intR amount of red in eye and nose
+   * @param intG amount of green in eye and nose
+   * @param intB amount of blue in eye and nose
    * @author George D.
    */
   private void pig(int intX, int intY, int intR, int intG, int intB){
@@ -141,12 +133,13 @@ public class Sketch extends PApplet {
   
   /**
    * determins how many times to print a given image and with how much spacing
-   * @param width of design
-   * @param height of design
-   * @param min gap in height
-   * @param min gap in x
-   * @param returns desired values encoded in a float
+   * @param width width of design
+   * @param height height of design
+   * @param intMinGapX min gap in width
+   * @param intMinGapY gap in height
    * @param Created by George D.
+   * @return desired values encoded in a float
+   * @author George D.
    */
   private double spacing(int intWidth, int intHeight, int intMinGapX, int intMinGapY){
     // Declare Variables
